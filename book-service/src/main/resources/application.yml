@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bookservice
+    url: jdbc:postgresql://localhost:5432/bookdb
     username: postgres
     password: mysecretpassword
     driver-class-name: org.postgresql.Driver
@@ -12,9 +12,9 @@ spring:
 server:
   port: 9002
 
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#  instance:
-#    instance-id: ${spring.application.name}:${random.value}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${random.value}
