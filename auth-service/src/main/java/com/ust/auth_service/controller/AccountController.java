@@ -22,4 +22,9 @@ public class AccountController {
     public ResponseEntity<String> login(@RequestBody LoginRequestDto requestDto){
         return ResponseEntity.ok(accountService.login(requestDto));
     }
+
+    @GetMapping("/validate/token")
+    public ResponseEntity<Boolean> validateToken(@RequestParam String token){
+        return ResponseEntity.ok(accountService.verify(token));
+    }
 }

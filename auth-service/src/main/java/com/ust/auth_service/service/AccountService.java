@@ -46,4 +46,8 @@ public class AccountService {
                 .map(acc -> jwtTokenProvider.createToken(acc.getUsername(), acc.getRoles()))
                 .orElseThrow(() -> new RuntimeException("Invalid Credentials"));
     }
+
+    public boolean verify(String token) {
+        return jwtTokenProvider.validateToken(token);
+    }
 }

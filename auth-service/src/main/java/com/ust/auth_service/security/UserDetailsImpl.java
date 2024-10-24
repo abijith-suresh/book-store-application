@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
         this.username = account.getUsername();
         this.password = account.getPassword();
         this.authorities = Arrays.stream(account.getRoles().split(","))
-                .map(String::trim) // Trim whitespace
+                .map(String::trim)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
