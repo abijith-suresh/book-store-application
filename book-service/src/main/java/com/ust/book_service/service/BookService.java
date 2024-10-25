@@ -46,4 +46,8 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException("There is no Book of the given Id"));
     }
 
+    public List<Book> findBooksByAuthorId(int authorId) {
+        return bookRepo.findByAuthorId(authorId);
+    }
+
 }
