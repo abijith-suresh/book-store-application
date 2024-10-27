@@ -2,4 +2,4 @@ spring:
   application:
     name: book-service
   config:
-    import: "configserver:http://localhost:8888"
+    import: "configserver:http://config-service:8888"

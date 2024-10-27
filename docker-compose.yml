@@ -1,0 +1,94 @@
+services:
+  registry-service:
+    image: registry-service-image
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://registry-service:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  config-service:
+    image: config-service-image
+    ports:
+      - "8888:8888"
+    depends_on:
+      registry-service:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://config-service:8888/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  postgresdb:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - ./initdb/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]  
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  gateway-service:
+    image: gateway-service-image
+    ports:
+      - "9090:9090"
+    depends_on:
+      config-service:
+        condition: service_healthy  
+      postgresdb:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  auth-service:
+    image: auth-service-image
+    ports:
+      - "9000:9000"
+    depends_on:
+      config-service:
+        condition: service_healthy  
+      postgresdb:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  author-service:
+    image: author-service-image
+    ports:
+      - "9004:9004"
+    depends_on:
+      config-service:
+        condition: service_healthy  
+      postgresdb:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  book-service:
+    image: book-service-image
+    ports:
+      - "9002:9002"
+    depends_on:
+      config-service:
+        condition: service_healthy  
+      postgresdb:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
