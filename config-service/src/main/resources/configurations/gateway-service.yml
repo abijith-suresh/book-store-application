@@ -34,3 +34,5 @@ spring:
           uri: http://author-service:9004
           predicates:
             - Path=/api/authors/**
+          filters:
+            - AuthenticationFilter
