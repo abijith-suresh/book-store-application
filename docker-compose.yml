@@ -1,6 +1,7 @@
 services:
   registry-service:
     image: registry-service-image
+    build: ./registry-service
     ports:
       - "8761:8761"
     networks:
@@ -13,6 +14,7 @@ services:
 
   config-service:
     image: config-service-image
+    build: ./config-service
     ports:
       - "8888:8888"
     depends_on:
@@ -44,6 +46,7 @@ services:
 
   gateway-service:
     image: gateway-service-image
+    build: ./gateway-service
     ports:
       - "9090:9090"
     depends_on:
@@ -56,6 +59,7 @@ services:
 
   auth-service:
     image: auth-service-image
+    build: ./auth-service
     ports:
       - "9000:9000"
     depends_on:
@@ -68,6 +72,7 @@ services:
 
   author-service:
     image: author-service-image
+    build: ./author-service
     ports:
       - "9004:9004"
     depends_on:
@@ -80,6 +85,7 @@ services:
 
   book-service:
     image: book-service-image
+    build: ./book-service
     ports:
       - "9002:9002"
     depends_on:
