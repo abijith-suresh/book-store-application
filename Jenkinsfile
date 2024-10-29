@@ -23,7 +23,7 @@ pipeline {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         bat 'docker-compose down || true'
                         
-                        def services = ['api-gateway', 'config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service', 'postgresdb']
+                        def services = ['config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service', 'postgresdb']
                         
                         for (service in services) {
                             bat 'docker rmi -f ${service}:latest || true'
@@ -37,7 +37,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    def services = ['api-gateway', 'config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service']
+                    def services = ['config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service']
 
                     for (service in services) {
                         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
