@@ -29,7 +29,6 @@ pipeline {
                             bat 'docker rmi -f ${service}:latest || true'
                             
                         }
-                        bat 'docker network rm microservices-network || true'
                     }
                 }
             }
