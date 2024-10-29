@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven-3.9.8'
-        jdk 'JDK-17'
+        jdk 'JDK-21'
     }
 
     stages {
@@ -21,16 +21,15 @@ pipeline {
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        bat 'docker-compose down || true'
+                        
                         def services = ['api-gateway', 'config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service', 'postgresdb']
-
+                        
                         for (service in services) {
-                            bat """
-                            docker stop ${service} || true
-                            docker rm ${service} || true
-                            docker rmi -f ${service}:latest || true
-                            docker network rm microservices-network || true
-                            """
+                            bat 'docker rmi -f ${service}:latest || true'
+                            
                         }
+                        bat 'docker network rm microservices-network || true'
                     }
                 }
             }
@@ -52,30 +51,11 @@ pipeline {
             }
         }
 
-        stage('Create Docker Network') {
+        stage('Run Docker Compose Up') {
             steps {
                 script {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        bat 'docker network create microservices-network || echo "Network already exists"'
-                    }
-                }
-            }
-        }
-
-        stage('Post-Build') {
-            steps {
-                script {
-                    def services = ['api-gateway', 'config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service']
-
-                    for (service in services) {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                            dir(service) {
-                                bat """
-                                docker build -t ${service}:latest .
-                                docker run -d --network microservices-network -p ${getPort(service)}:${getPort(service)} --name ${service} ${service}:latest
-                                """
-                            }
-                        }
+                        bat 'docker-compose up -d'
                     }
                 }
             }
