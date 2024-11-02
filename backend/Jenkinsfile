@@ -20,7 +20,7 @@ pipeline {
         stage('Pre-Build') {
             steps {
                 script {
-                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    `(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                         bat 'docker-compose down || true'
                         
                         def services = ['config-service', 'registry-service', 'auth-service', 'author-service', 'book-service', 'gateway-service', 'postgresdb']
